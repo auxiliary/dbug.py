@@ -1,12 +1,29 @@
+import os
 import sys
 import traceback
 import code
 import bpython
 
-def catch_with_bpython(_type, _value, _traceback):
-    traceback.print_exception(_type, _value, _traceback)
+def print_banner():
     message = "Select a frame to view using the select(<frame #>) command"
+    print '\n\x1b[0;34;40m' + message + '\x1b[0m'
+    message = "Reload the script using the reload() command"
     print '\x1b[0;34;40m' + message + '\x1b[0m'
+
+def print_with_color(text):
+    print '\x1b[0;34;40m' + text + '\x1b[0m',
+
+def catch_with_bpython(_type, _value, _traceback):
+    #traceback.print_exception(_type, _value, _traceback)
+    listing = traceback.format_exception(_type, _value, _traceback)
+    counter = 0
+    for line in listing:
+        if line.strip().startswith("File "):
+            print_with_color(str(counter) + ") ")
+            counter += 1
+        print line
+    print_banner()
+
     all_locals = [_traceback.tb_frame.f_locals]
     while _traceback.tb_next != None:
         _traceback = _traceback.tb_next
@@ -14,6 +31,9 @@ def catch_with_bpython(_type, _value, _traceback):
 
     def select(frame_no):
         bpython.embed(all_locals[frame_no])
+
+    def reload():
+        os.execv(sys.executable, ['python'] + sys.argv)
 
     code.interact(local=locals(), banner='')
 
