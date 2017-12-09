@@ -14,7 +14,6 @@ def print_with_color(text):
     print '\x1b[0;34;40m' + text + '\x1b[0m',
 
 def catch_with_bpython(_type, _value, _traceback):
-    #traceback.print_exception(_type, _value, _traceback)
     listing = traceback.format_exception(_type, _value, _traceback)
     counter = 0
     for line in listing:
@@ -39,4 +38,20 @@ def catch_with_bpython(_type, _value, _traceback):
 
 if __name__ == '__main__':
     sys.excepthook = catch_with_bpython
-    execfile(sys.argv[1])
+
+    args = sys.argv[1].split(":")
+    filename = args[0]
+    if len(args) > 1:
+        line = int(args[1])
+    else:
+        line = None
+
+    fp = open(filename)
+    source = fp.readlines()
+    fp.close()
+    if line != None:
+        source[line - 1] = source[line - 1] \
+            .replace("\n", "; raise Exception('breakpoint')\n")
+    source = ''.join(source)
+
+    exec(compile(source, filename=filename, mode='exec'))
