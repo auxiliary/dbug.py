@@ -41,6 +41,9 @@ if __name__ == '__main__':
 
     args = sys.argv[1].split(":")
     filename = args[0]
+    # remove the line argument so it doesn't interfere with 
+    # user's program
+    sys.argv.pop(0)
     if len(args) > 1:
         line = int(args[1])
     else:
@@ -50,8 +53,11 @@ if __name__ == '__main__':
     source = fp.readlines()
     fp.close()
     if line != None:
-        source[line - 1] = source[line - 1] \
-            .replace("\n", "; raise Exception('breakpoint')\n")
+        if source[line - 1].strip() == "": # causes indentation issues
+            source[line - 1] = "raise Exception('breakpoint')\n"
+        else:
+            source[line - 1] = source[line - 1] \
+                .replace("\n", "; raise Exception('breakpoint')\n")
     source = ''.join(source)
 
     exec(compile(source, filename=filename, mode='exec'))
