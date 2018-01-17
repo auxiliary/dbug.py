@@ -6,12 +6,12 @@ import bpython
 
 def print_banner():
     message = "Select a frame to view using the select(<frame #>) command"
-    print '\n\x1b[0;34;40m' + message + '\x1b[0m'
+    print('\n\x1b[0;34;40m' + message + '\x1b[0m')
     message = "Reload the script using the reload() command"
-    print '\x1b[0;34;40m' + message + '\x1b[0m'
+    print('\x1b[0;34;40m' + message + '\x1b[0m')
 
 def print_with_color(text):
-    print '\x1b[0;34;40m' + text + '\x1b[0m',
+    print('\x1b[0;34;40m' + text + '\x1b[0m',)
 
 def catch_with_bpython(_type, _value, _traceback):
     listing = traceback.format_exception(_type, _value, _traceback)
@@ -20,7 +20,7 @@ def catch_with_bpython(_type, _value, _traceback):
         if line.strip().startswith("File "):
             print_with_color(str(counter) + ") ")
             counter += 1
-        print line
+        print(line)
     print_banner()
 
     all_locals = [_traceback.tb_frame.f_locals]
