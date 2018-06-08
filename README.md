@@ -1,6 +1,6 @@
 # dbug.py
 
-ATM, runs your script and wherever it runs into an exception/error, gives you access to the 
+dbug runs your script, and wherever it runs into an exception/error, gives you access to the 
 frames and opens the bpython shell right there, giving you access to the variables. 
 After fixing your code, you can run `reload()` to test again. 
 
